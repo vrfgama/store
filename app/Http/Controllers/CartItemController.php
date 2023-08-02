@@ -14,18 +14,18 @@ class CartItemController extends Controller
     public function cartAdd($id, Request $request)
     {
         $product= Product::find($id);
-
+        /*
         $cart= Carts::create([
             'user_id'=> 1,
             'total_itens'=> 1,
             'total_price'=> 1
-        ]);
+        ]);*/
         
         
         CartItem::create([
             'price'=> $product->price,
             'total_itens'=> 1,
-            'cart_id'=> $cart->id,
+            'cart_id'=> 1,//$cart->id,
             'product_id'=> $product->id
         ]);
 

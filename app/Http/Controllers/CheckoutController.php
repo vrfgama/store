@@ -22,7 +22,7 @@ class CheckoutController extends Controller
 
         $address= Address::find($user2->id);
 
-        $request->session()->put(['address'=>$address]);
+        $request->session()->put(['address'=>$address]); //inserir endereço na sessão após confirmação, não antes
         
         return view('checkout-address',['address'=>$address]);
     }
@@ -32,6 +32,7 @@ class CheckoutController extends Controller
     {
         $user= $request->session()->get('user');
         $credit_card= CreditCard::find(['user_id'=>$user->id]);
+        //dar opção de inserir outro cartão de crédito e guardar o cartão na sessão somente após a confirmação 
 
         return view('payment', ['credit_card'=>$credit_card]);
 
@@ -68,6 +69,8 @@ class CheckoutController extends Controller
             ]);
 
         }
+
+        // setar campo de finalização na tabela order
 
         return view('success');
     }

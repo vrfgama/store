@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('credit_card_id')->references('id')->on('credit_cards');
             $table->bigInteger('delivery_address_id')->unsigned();
             $table->foreign('delivery_address_id')->references('id')->on('addresses');
-            $table->boolean('finish');
+            $table->boolean('finish')->nullable();
             $table->timestamps();
         });
     }
