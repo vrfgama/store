@@ -1,4 +1,9 @@
 
+@extends('template')
+
+@section('content')
+
+
 <a href="{{ route('list.cart') }}">Meu carrinho</a>
 <br><br>
 
@@ -16,3 +21,5 @@
     <br>
 
 @endforeach
+
+@endsection
