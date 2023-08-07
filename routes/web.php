@@ -38,3 +38,4 @@ Route::get('/checkout_finish', [CheckoutController::class, 'finish'])->name('che
 
 Route::get('login_form', [LoginController::class, 'form'])->name('login.form');
 Route::post('login_validate', [LoginController::class, 'loginValidate'])->name('login.validate');
+Route::get('login_logout', [LoginController::class, 'logout'])->name('login.logout');

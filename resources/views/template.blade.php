@@ -10,7 +10,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="#">Store</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -25,14 +25,14 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Pricing</a>
         </li>
-        <li class="nav-item dropdown">
+         <li class="nav-item dropdown">
           <a class="btn btn-dark dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown link
+            Cadastro ou login
           </a>
           <ul class="dropdown-menu dropdown-menu-dark">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="{{ route('login.form') }}">Já sou cliente</a></li>
+            <li><a class="dropdown-item" href="#">Criar cadastro</a></li>
+            <li><a class="dropdown-item" href="{{ route('login.logout') }}">Sair</a></li>
           </ul>
         </li>
       </ul>
@@ -41,7 +41,10 @@
     </nav>
 
     <div class='container'>
-        @yield('content')
+      {{ @session()->get('user')->email }}
+      <br>
+            
+      @yield('content')
     </div>
         
 
