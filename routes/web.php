@@ -29,12 +29,17 @@ Route::get('/category/{id}', [CategoryController::class, 'category'])->name('cat
 
 Route::get('/product/{id}', [ProductController::class, 'product'])->name('product');
 
-Route::get('/cart_add/{id}', [CartItemController::class, 'cartAdd'])->name('cart.add');
-Route::get('/cart', [CartItemController::class, 'list'])->name('list.cart');
 
-Route::get('/checkout_address', [CheckoutController::class, 'address'])->name('checkout.address');
-Route::get('/checkout_payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
-Route::get('/checkout_finish', [CheckoutController::class, 'finish'])->name('checkout.finish');
+Route::middleware('auth')->group(function(){
+
+    Route::get('/cart_add/{id}', [CartItemController::class, 'cartAdd'])->name('cart.add');
+    Route::get('/cart', [CartItemController::class, 'list'])->name('list.cart');
+
+    Route::get('/checkout_address', [CheckoutController::class, 'address'])->name('checkout.address');
+    Route::get('/checkout_payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+    Route::get('/checkout_finish', [CheckoutController::class, 'finish'])->name('checkout.finish');
+
+});
 
 Route::get('login_form', [LoginController::class, 'form'])->name('login.form');
 Route::post('login_validate', [LoginController::class, 'loginValidate'])->name('login.validate');
