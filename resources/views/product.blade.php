@@ -1,3 +1,6 @@
+@extends('template')
+
+@section('content')
 
 {{ $product->name }}
 <br>
@@ -6,3 +9,5 @@
 {{ $product->price }}
 <br><br>
 <a href="{{ route('cart.add', $product->id) }}">Adicionar ao carrinho</a>
+
+@endsection

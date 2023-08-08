@@ -2,10 +2,6 @@
 
 @section('content')
 
-
-<a href="{{ route('list.cart') }}">Meu carrinho</a>
-<br><br>
-
 @foreach( $list as $key => $list )
 
     {{$key}}  <a href="{{ route('category', $list->first()->c_id) }}">Ver mais</a>

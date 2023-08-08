@@ -1,3 +1,6 @@
+@extends('template')
+
+@section('content')
 
 @foreach($credit_card as $cc)
 
@@ -18,3 +21,5 @@
 
 <br><br>
 <a href="{{ route('checkout.finish') }}">Finalizar compra</a>
+
+@endsection

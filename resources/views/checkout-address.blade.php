@@ -1,3 +1,7 @@
+@extends('template')
+
+@section('content')
+
 Endereço de entrega
 <br><br>
 
@@ -23,3 +27,5 @@ Estado:
 
 <br><br>
 <a href="{{ route('checkout.payment') }}">Confirmar endereço de entrega</a>
+
+@endsection

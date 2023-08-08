@@ -1,3 +1,6 @@
+@extends('template')
+
+@section('content')
 
 {{ $category->name }}
 <br><br>
@@ -13,3 +16,5 @@
     <a href="{{ route('cart.add', $products->id) }}">Adicionar ao carrinho</a>
     <br><br>
 @endforeach
+
+@endsection
