@@ -11,25 +11,31 @@ use Illuminate\Support\Facades\DB;
 
 class CartItemController extends Controller
 {
-    public function cartAdd($id, Request $request)
+    public function cartItemAdd($id, Request $request)
     {
+
         $product= Product::find($id);
-        /*
-        $cart= Carts::create([
-            'user_id'=> 1,
-            'total_itens'=> 1,
-            'total_price'=> 1
-        ]);*/
+        $user= request()->session()->get('user');
+      
+
+        if( request()->session()->get('cart_id') == null ) {
+            $cart_id= $this->cartAdd($product, $user, $request);
+            $request->session()->put(['cart_id'=> $cart_id]);
+        }else{
+            $cart_id= request()->session()->get('cart_id');
+            $this->cartUpdate($cart_id, $product, $request);
+        }       
         
         
         CartItem::create([
             'price'=> $product->price,
-            'total_itens'=> 1,
-            'cart_id'=> 1,//$cart->id,
+            'total_itens'=> $request->qtd,
+            'cart_id'=> $cart_id,
             'product_id'=> $product->id
         ]);
 
-        return redirect()->back()->with('erro', 'erro');
+
+        return redirect('list_catalog');
     }
 
     public function list(Request $request)
@@ -51,5 +57,32 @@ class CartItemController extends Controller
         $request->session()->put(['list'=> $list, 'tt_price'=>$tt_price, 'tt_itens'=> $tt_itens]);
 
         return view('cart-list', ['list'=> $list, 'tt_price'=>$tt_price, 'tt_itens'=> $tt_itens]);
+    }
+
+
+
+    public function cartAdd($product, $user, $request)
+    {
+        
+        $cart= Carts::create([
+            'user_id'=> $user->id,
+            'total_itens'=> $request->qtd,
+            'total_price'=> ( $product->price * $request->qtd )
+        ]);
+
+        return $cart->id;
+
+    }
+
+
+    public function cartUpdate($cart_id, $product, $request)
+    {
+        $cart= Carts::find($cart_id);
+
+        $cart->total_price+= ( $product->price * $request->qtd );
+        $cart->total_itens+= $request->qtd;
+
+        $cart->update();
+
     }
 }
