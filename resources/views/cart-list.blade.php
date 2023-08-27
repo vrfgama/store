@@ -14,8 +14,10 @@ Total de itens no carrinho: {{ $tt_itens }}
 
     {{ $item->name }}
     <br>
+    Quantidade: 
     {{ $item->total_itens }}
     <br>
+    R$ 
     {{ $item->price }}
     <br><br>
 

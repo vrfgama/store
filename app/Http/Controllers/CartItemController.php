@@ -38,14 +38,15 @@ class CartItemController extends Controller
         return redirect('list_catalog');
     }
 
-    public function list(Request $request)
+    public function cartList(Request $request)
     {
         $list= DB::table('cart_itens as ci')
                    ->select('p.name as name', 'ci.total_itens as total_itens', 'ci.price as price')
                    ->join('products as p', 'ci.product_id', '=', 'p.id')
-                   ->get(); 
+                   ->get();
 
 
+        /*           
         $tt_price= 0;
         $tt_itens= 0;
 
@@ -53,10 +54,17 @@ class CartItemController extends Controller
             $tt_price+= $item->price;
             $tt_itens+= $item->total_itens;
         }
+        */
 
+        $cart= Carts::where('user_id', $request->session()->get('user')->id )->first();
+
+        /*
         $request->session()->put(['list'=> $list, 'tt_price'=>$tt_price, 'tt_itens'=> $tt_itens]);
 
         return view('cart-list', ['list'=> $list, 'tt_price'=>$tt_price, 'tt_itens'=> $tt_itens]);
+        */
+
+        return view( 'cart-list', [ 'list'=> $list, 'tt_price'=> $cart->total_price, 'tt_itens'=> $cart->total_itens ]  );
     }
 
 
