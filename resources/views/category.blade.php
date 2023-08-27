@@ -2,10 +2,14 @@
 
 @section('content')
 
+<br>
 {{ $category->name }}
 <br><br>
 
 @foreach($products as $products)
+
+<form action="{{ route('cart.add', $products->id ) }}" method="post">
+    @csrf
 
     {{ $products->name }}
     <br>
@@ -13,7 +17,9 @@
     <br>
     R$ {{ $products->price }}
     <br>
-    <select>
+    Quantidade:
+    <br>
+    <select name="qtd" id="qtd">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -21,8 +27,13 @@
         <option value="5">5</option>
     </select>
     <br>
-    <a href="{{ route('cart.add', $products->id) }}">Adicionar ao carrinho</a>
-    <br><br>
+
+    <input type="submit" value="Adicionar ao carrinho">
+    <br>
+    <br>    
+
+</form>        
+
 @endforeach
 
 @endsection
