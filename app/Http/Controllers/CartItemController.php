@@ -11,67 +11,32 @@ use Illuminate\Support\Facades\DB;
 
 class CartItemController extends Controller
 {
-    public function cartItemAdd($id, Request $request)
+    public function cartItemControll($id, Request $request)
     {
 
         $product= Product::find($id);
         $user= request()->session()->get('user');
-      
+        $cart_id= $this->getCartId($request);
 
-        if( request()->session()->get('cart_id') == null ) {
+        //verifica se já existe id do cart na sessão, se sim, cria o registro e coloca o valor na variável cart_id, se não, recupera o id e atribui a variável cart_id
+        if( $this->getCartId($request) == null ) {
             $cart_id= $this->cartAdd($product, $user, $request);
             $request->session()->put(['cart_id'=> $cart_id]);
-        }else{
-            $cart_id= request()->session()->get('cart_id');
-            $this->cartUpdate($cart_id, $product, $request);
-        }       
+        }
+   
         
-        
-        CartItem::create([
-            'price'=> $product->price,
-            'total_itens'=> $request->qtd,
-            'cart_id'=> $cart_id,
-            'product_id'=> $product->id
-        ]);
+        //com id do cart recuperado cria o registro do item na tabela cart_itens
+        $this->cartItemAdd($product, $cart_id, $request);
 
+        //atualiza os campos total_itens e total_price da tabela carts
+        $this->cartUpdate($request);
 
         return redirect('list_catalog');
     }
 
-    public function cartList(Request $request)
-    {
-        $list= DB::table('cart_itens as ci')
-                   ->select('p.name as name', 'ci.total_itens as total_itens', 'ci.price as price')
-                   ->join('products as p', 'ci.product_id', '=', 'p.id')
-                   ->get();
-
-
-        /*           
-        $tt_price= 0;
-        $tt_itens= 0;
-
-        foreach($list as $item){
-            $tt_price+= $item->price;
-            $tt_itens+= $item->total_itens;
-        }
-        */
-
-        $cart= Carts::where('user_id', $request->session()->get('user')->id )->first();
-
-        /*
-        $request->session()->put(['list'=> $list, 'tt_price'=>$tt_price, 'tt_itens'=> $tt_itens]);
-
-        return view('cart-list', ['list'=> $list, 'tt_price'=>$tt_price, 'tt_itens'=> $tt_itens]);
-        */
-
-        return view( 'cart-list', [ 'list'=> $list, 'tt_price'=> $cart->total_price, 'tt_itens'=> $cart->total_itens ]  );
-    }
-
-
 
     public function cartAdd($product, $user, $request)
     {
-        
         $cart= Carts::create([
             'user_id'=> $user->id,
             'total_itens'=> $request->qtd,
@@ -79,18 +44,111 @@ class CartItemController extends Controller
         ]);
 
         return $cart->id;
+    }
+
+
+    public function cartItemAdd($product, $cart_id, $request){
+
+        CartItem::create([
+            'price'=> $product->price,
+            'total_itens'=> $request->qtd,
+            'cart_id'=> $cart_id,
+            'product_id'=> $product->id
+        ]);
 
     }
 
 
-    public function cartUpdate($cart_id, $product, $request)
+    public function cartList(Request $request)
     {
-        $cart= Carts::find($cart_id);
 
-        $cart->total_price+= ( $product->price * $request->qtd );
-        $cart->total_itens+= $request->qtd;
+        $cart_id= $this->getCartId($request);
+
+        // se não tiver o id do cart na sessão, retorna que o carrinho esta vazio 
+        if( $cart_id == null ){
+
+            return view('cart-empty');
+
+        }else{
+            /*
+            //$cart_id= request()->session()->get('cart_id');    
+
+            $tt_itens= DB::table( 'cart_itens' )
+                ->select(DB::raw('sum(total_itens)'))
+                ->where( 'cart_id', '=',  $cart_id )
+                ->get();
+                
+                // se tiver id do cart na sessão mas não tiver itens no cart_itens, retorna que carrinho esta vazio
+
+                if($tt_itens == null ){
+
+                    return view('cart-empty');
+
+                }*/
+
+
+            //se tiver id do cart na sessão mas no campo de total_itens estiver vazio, retorna que carrinho esta vazio
+            $cart= DB::table('carts')
+                       ->select('total_itens', 'total_price')
+                       ->where('id', '=', $cart_id)
+                       ->first();
+                       
+            if($cart->total_itens == 0){
+                return view('cart-empty');
+            }           
+
+        }
+
+        //recupera da tabela cart o total de itens e da compra    
+        //$cart= Carts::where('id', $cart_id)->first();
+
+        //recupera da tabela cart_itens a lista de produtos no carrinho
+        $list= DB::table('cart_itens as ci')
+                   ->select('p.id as id', 'p.name as name', 'ci.total_itens as total_itens', 'ci.price as price')
+                   ->join('products as p', 'ci.product_id', '=', 'p.id')
+                   ->where('ci.cart_id', '=', $cart_id )
+                   ->get();
+
+
+        return view( 'cart-list', [ 'list'=> $list, 'tt_price'=> $cart->total_price, 'tt_itens'=> $cart->total_itens ]  );
+
+    }    
+
+
+    public function cartUpdate(Request $request)
+    {
+
+        $cart_id= $this->getCartId($request);
+        $cart_itens= CartItem::where('cart_id', $cart_id)->get();
+        $cart= Carts::find($cart_id);
+        $cart->total_itens=  $cart->total_price= 0;
+
+        foreach($cart_itens as $cart_item){
+            $cart->total_price+= ( $cart_item->price * $cart_item->total_itens );
+            $cart->total_itens+= $cart_item->total_itens; 
+        }
 
         $cart->update();
+    }
 
+
+    public function cartRemoveItem($id, Request $request)
+    {
+        $cart_id= $this->getCartId($request);
+
+        DB::table('cart_itens')
+            ->where('cart_id', '=', $cart_id)
+            ->where('product_id', '=', $id)
+            ->delete();
+
+        $this->cartUpdate($request);    
+
+        return redirect('cart');    
+    }
+
+
+    public function getCartId(Request $request)
+    {
+        return $request->session()->get('cart_id');
     }
 }

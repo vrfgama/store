@@ -32,8 +32,10 @@ Route::get('/product/{id}', [ProductController::class, 'product'])->name('produc
 
 Route::middleware('auth')->group(function(){
 
-    Route::post('/cart_add/{id}', [CartItemController::class, 'cartItemAdd'])->name('cart.add');
+    Route::post('/cart_add/{id}', [CartItemController::class, 'cartItemControll'])->name('cart.add');
     Route::get('/cart', [CartItemController::class, 'cartList'])->name('list.cart');
+    Route::get('/cart_remove/{id}', [CartItemController::class, 'cartRemoveItem'])->name('cart.remove');
+
 
     Route::get('/checkout_address', [CheckoutController::class, 'address'])->name('checkout.address');
     Route::get('/checkout_payment', [CheckoutController::class, 'payment'])->name('checkout.payment');

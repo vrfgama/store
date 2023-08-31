@@ -19,8 +19,12 @@ Total de itens no carrinho: {{ $tt_itens }}
     <br>
     R$ 
     {{ $item->price }}
-    <br><br>
+    <br>
 
+    <a href=" {{ route('cart.remove', $item->id) }} ">Remover do carrinho</a>
+
+    <br><br>
+    
 @endforeach
 
 @endsection
