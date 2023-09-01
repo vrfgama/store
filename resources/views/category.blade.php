@@ -15,7 +15,7 @@
     <br>
     {{ $products->description }}
     <br>
-    R$ {{ $products->price }}
+    R$ {{ number_format( $products->price ,2,",",".") }}
     <br>
     Quantidade:
     <br>

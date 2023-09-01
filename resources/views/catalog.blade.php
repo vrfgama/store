@@ -15,7 +15,7 @@
         {{ $list->p_name }}
         <br>
 
-        R$ {{ $list->p_price }}
+        R$ {{ number_format( $list->p_price ,2,",",".") }}
         <br>
 
         Quantidade:

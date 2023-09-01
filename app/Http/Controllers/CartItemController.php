@@ -70,22 +70,6 @@ class CartItemController extends Controller
             return view('cart-empty');
 
         }else{
-            /*
-            //$cart_id= request()->session()->get('cart_id');    
-
-            $tt_itens= DB::table( 'cart_itens' )
-                ->select(DB::raw('sum(total_itens)'))
-                ->where( 'cart_id', '=',  $cart_id )
-                ->get();
-                
-                // se tiver id do cart na sessão mas não tiver itens no cart_itens, retorna que carrinho esta vazio
-
-                if($tt_itens == null ){
-
-                    return view('cart-empty');
-
-                }*/
-
 
             //se tiver id do cart na sessão mas no campo de total_itens estiver vazio, retorna que carrinho esta vazio
             $cart= DB::table('carts')
@@ -99,9 +83,7 @@ class CartItemController extends Controller
 
         }
 
-        //recupera da tabela cart o total de itens e da compra    
-        //$cart= Carts::where('id', $cart_id)->first();
-
+        
         //recupera da tabela cart_itens a lista de produtos no carrinho
         $list= DB::table('cart_itens as ci')
                    ->select('p.id as id', 'p.name as name', 'ci.total_itens as total_itens', 'ci.price as price')

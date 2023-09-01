@@ -2,11 +2,13 @@
 
 @section('content')
 
-Valor total da compra: R${{ $tt_price }}
+Valor total da compra: R${{ number_format( $tt_price ,2,",",".") }}
 <br>
 Total de itens no carrinho: {{ $tt_itens }}
 <br>
 <a href="{{ route('checkout.address') }}">Fechar compra</a>
+<br>
+<a href="{{ route('list.catalog') }}">Continuar comprando</a>
 
 <br><br>
 
@@ -17,8 +19,11 @@ Total de itens no carrinho: {{ $tt_itens }}
     Quantidade: 
     {{ $item->total_itens }}
     <br>
-    R$ 
-    {{ $item->price }}
+    Preço unitário R$ 
+    {{  number_format( $item->price ,2,",",".") }}
+    <br>
+    Total R$
+    {{ number_format( $item->total_itens * $item->price, 2,",",".") }}
     <br>
 
     <a href=" {{ route('cart.remove', $item->id) }} ">Remover do carrinho</a>
