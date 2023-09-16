@@ -2,8 +2,10 @@
 
 @section('content')
 
-@foreach($credit_card as $cc)
+Dados do cartão de crédito para pagamento
 
+@foreach($credit_card as $cc)
+    <br><br>
     Número: 
     {{ $cc->number }}
     <br>
@@ -20,6 +22,6 @@
 @endforeach
 
 <br><br>
-<a href="{{ route('checkout.finish') }}">Finalizar compra</a>
+<a href="{{ route('checkout.confirm.payment', $cc->id ) }}">Finalizar compra</a>
 
 @endsection

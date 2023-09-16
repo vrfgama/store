@@ -6,7 +6,7 @@ Valor total da compra: R${{ number_format( $tt_price ,2,",",".") }}
 <br>
 Total de itens no carrinho: {{ $tt_itens }}
 <br>
-<a href="{{ route('checkout.address') }}">Fechar compra</a>
+<a href="{{ route('checkout.show.address') }}">Fechar compra</a>
 <br>
 <a href="{{ route('list.catalog') }}">Continuar comprando</a>
 

@@ -2,8 +2,10 @@
 
 @section('content')
 
-Endereço de entrega
+Confirme o endereço de entrega
 <br><br>
+
+@foreach( $adresses as $address )
 
 Rua: 
 {{ $address->street }}
@@ -24,8 +26,12 @@ Estado:
 {{ $address->state }}
 <br>
 {{ $address->country }}
+<br>
+<a href="{{ route('checkout.confirm.address', $address->id ) }}">Confirmar este endereço para entrega</a>
 
 <br><br>
-<a href="{{ route('checkout.payment') }}">Confirmar endereço de entrega</a>
+
+@endforeach
+
 
 @endsection

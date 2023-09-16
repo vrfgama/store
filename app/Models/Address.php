@@ -13,7 +13,7 @@ class Address extends Model
     use SoftDeletes;
     
 
-    protected $table= 'addresses';
+    protected $table= 'adresses';
 
     protected $fillable= [
         'street', 

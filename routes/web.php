@@ -36,9 +36,11 @@ Route::middleware('auth')->group(function(){
     Route::get('/cart', [CartItemController::class, 'cartList'])->name('list.cart');
     Route::get('/cart_remove/{id}', [CartItemController::class, 'cartRemoveItem'])->name('cart.remove');
 
+    Route::get('/checkout_show_address', [CheckoutController::class, 'showAdresses'])->name('checkout.show.address');
+    Route::get('/checkout_confirm_address/{id}', [CheckoutController::class, 'confirmAddress'])->name('checkout.confirm.address');
+    Route::get('/checkout_show_payment', [CheckoutController::class, 'showPayment'])->name('checkout.show.payment');
+    Route::get('/checkout_confirm_payment/{id}', [CheckoutController::class, 'confirmPayment'])->name('checkout.confirm.payment');
 
-    Route::get('/checkout_address', [CheckoutController::class, 'address'])->name('checkout.address');
-    Route::get('/checkout_payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
     Route::get('/checkout_finish', [CheckoutController::class, 'finish'])->name('checkout.finish');
 
 });

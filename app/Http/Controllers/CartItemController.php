@@ -79,7 +79,9 @@ class CartItemController extends Controller
                        
             if($cart->total_itens == 0){
                 return view('cart-empty');
-            }           
+            }
+
+            $request->session()->put(['cart'=>$cart]);        
 
         }
 
